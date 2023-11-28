@@ -4,14 +4,15 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
-import {Validation} from '../validation/auth.js';
+import {Validation} from './validation/auth.js';
 import { validationResult } from 'express-validator';
-import UserSchema from '../models/user.js';
-import http from 'http';
+import UserSchema from './models/user.js';
+import http, { get } from 'http';
 import { createServer } from "http";
 import { Server } from "socket.io";
 import bodyParser from 'body-parser'
-import checkAuth from '../middlevares/checkAuth.js';
+import checkAuth from './middlevares/checkAuth.js';
+import {getPlayer} from './server/player.js';
 
 const urlencodedParser = express.urlencoded({extended: false});
 
@@ -45,39 +46,26 @@ const io = new Server(server, {
 
 // Ещё не придумал
 
-const players = [];
-let count = 1;
+let players = null;
 io.on("connect", (socket) =>
 {
-    try
-    {
-        socket.on("server", () => {
-            players.push(
-                    {
-                    id: socket.id,
-                    count: count,
-                    });
-                count++;
-                // io.sockets.emit("state", (err) => {console.log(err)});
-                io.sockets.emit("state",players);
-            console.log(players);
-
-            });
-            socket.on("disconnect", () => {
-                delete players[socket.id];
-                io.sockets.emit("state", players);
-                console.log(players);
-
-                count--;
-                });
-         
-    }
-    catch(err)
-    {
-        console.log(err);
-    }
- 
+     players = getPlayer(socket);
+    setTimeout(() => {
+    console.log(players);
+    }, 1000);
 });
+
+const gameloop = (players, io) => 
+{
+    io.sockets.emit("state", players);
+}
+
+setInterval(() => {
+    if(players && io)
+    {
+        gameloop(players,io);
+    }
+}, 1000 / 60);
 
 // Роутер
 
