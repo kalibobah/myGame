@@ -11,6 +11,11 @@ class Player {
         this.radius = 30,
         this.angle = 0
     }
+    updateRotation(mouseX, mouseY) {
+        const dx = mouseX - this.positionX;
+        const dy = mouseY - this.positionY;
+        this.angle = Math.atan2(dy, dx);
+      }
 }
 
         
@@ -31,14 +36,16 @@ socket.on("movement", (data) =>
 const player = players[socket.id];
 if(player)
 {
-    if(player.positionY <= 0 || player.positionY === 885)
+    if(player.positionY <= 0 || player.positionY === 947)
     {
         player.positionY -= 5;
     };
-    if(player.positionX <= 0 || player.positionX === 1900)
+    if(player.positionX <= 0 || player.positionX === 2050)
     {
         player.positionX -= 5;
     };
+    player.updateRotation(data.mouseX, data.mouseY);
+
 }
 
 if (data.up)

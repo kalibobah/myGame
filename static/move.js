@@ -3,8 +3,14 @@ const movement =
     up: false,
     down: false,
     right: false,
-    left: false
+    left: false,
+    mouseX: 0,
+    mouseY: 0,
 }
+document.addEventListener('mousemove', (event) => {
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+  });
 document.addEventListener("keydown", (e) => {
     if ((e.code === 'KeyW'))
     {
@@ -42,8 +48,10 @@ document.addEventListener("keydown", (e) => {
         movement.right = false;
     }
         });
-
-
+        
+        
 setInterval(() => {
+    movement.mouseX = mouseX;
+    movement.mouseY = mouseY;
     socket.emit("movement",movement);
 }, 1000 / 60);
