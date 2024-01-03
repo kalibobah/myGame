@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Document</title>
 </head>
 <body>
-    <h1>привет</h1>
+    <!-- <h1>привет</h1> -->
     <!-- <div></div> -->
-    <form method="post">
+    <!-- <form method="post">
         <h1>Войти</h1>
         <label for="">Пароль</label>
         <input type="text" name="password" />
@@ -28,12 +29,59 @@
         <input type="text" name="emailREG" id="">
         <input type="submit" value="Отправить" />
     </form>
-    <canvas id="canvas">
+    <div class="follow-cursor"></div> -->
+    <canvas id="canvas" width="2048" height="947" style="background: url(world.png)">
 
     </canvas>
     
     <script src="socket.io/socket.io.js"></script>
     <script src="client.js"></script>
+    <script src="move.js"></script>
+    <script src="draw.js"></script>
+    <!-- <script>
+        const canvas = document.getElementById("canvas");
+const context = canvas.getContext("2d");
+        canvas.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    // Расчет угла между центром круга и курсором
+    const angle = Math.atan2(mouseY - player.positionY, mouseX - player.positionX);
+
+    // Очистка canvas перед рисованием
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Рисование задней (нелицевой) части круга
+    context.beginPath();
+    context.arc(player.positionX, player.positionY, player.radius, 0, Math.PI * 2);
+    context.fillStyle = 'blue';
+    context.fill();
+    context.closePath();
+
+    // Рисование вертикальной линии между красной и синей частями
+    const lineLength = 20;
+    const lineX = player.positionX + lineLength * Math.cos(angle);
+    const lineY = player.positionY + lineLength * Math.sin(angle);
+    context.beginPath();
+    context.moveTo(player.positionX, player.positionY);
+    context.lineTo(lineX, lineY);
+    context.strokeStyle = 'black';
+    context.stroke();
+    context.closePath();
+
+    // Рисование лицевой части круга с учетом угла
+    context.save();
+    context.translate(player.positionX, player.positionY);
+    context.rotate(angle);
+    context.fillStyle = "red";
+    context.beginPath();
+    context.arc(0, 0, player.radius, -Math.PI / 2, Math.PI / 2);
+    context.fill();
+    context.closePath();
+    context.restore()
+});
+    </script> -->
 </body>
 
 </html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Move and Rotate Circle with Keyboard and Mouse</title>
+  <style>
+    canvas {
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="myCanvas" width="400" height="400"></canvas>
+  <script>
+    const canvas = document.getElementById('myCanvas');
+    const context = canvas.getContext('2d');
+
+    const circle = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      radius: 50,
+      faceColor: 'red',
+      speed: 2,
+      angle: 0,
+    };
+
+    // Флаги для отслеживания состояния клавиш
+    const keys = {
+      w: false,
+      a: false,
+      s: false,
+      d: false,
+    };
+
+    let isMouseMoving = false;
+
+    function drawCircle() {
+      // Рисование задней (нелицевой) части круга
+      context.beginPath();
+      context.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+      context.fillStyle = 'blue';
+      context.fill();
+      context.closePath();
+
+      // Рисование лицевой части круга
+      context.save();
+      context.translate(circle.x, circle.y);
+      context.rotate(circle.angle);
+      context.fillStyle = circle.faceColor;
+      context.beginPath();
+      context.arc(0, 0, circle.radius, -Math.PI / 2, Math.PI / 2);
+      context.fill();
+      context.closePath();
+      context.restore();
+    }
+
+    function update() {
+      // Очистка canvas перед рисованием
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Обновление координат для движения
+      if (keys.w) circle.y -= circle.speed;
+      if (keys.a) circle.x -= circle.speed;
+      if (keys.s) circle.y += circle.speed;
+      if (keys.d) circle.x += circle.speed;
+
+      // Вызов функции для рисования круга
+      drawCircle();
+
+      // Вызов requestAnimationFrame только при активных изменениях
+      if (keys.w || keys.a || keys.s || keys.d || isMouseMoving) {
+        requestAnimationFrame(update);
+      }
+    }
+
+    // Отслеживание нажатия/отпускания клавиш
+    window.addEventListener('keydown', (event) => {
+      keys[event.key] = true;
+      requestAnimationFrame(update);
+    });
+
+    window.addEventListener('keyup', (event) => {
+      keys[event.key] = false;
+      requestAnimationFrame(update);
+    });
+
+    // Отслеживание движения мыши
+    canvas.addEventListener('mousemove', (event) => {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+
+      // Обновление угла круга в сторону курсора
+      circle.angle = Math.atan2(mouseY - circle.y, mouseX - circle.x);
+      isMouseMoving = true;
+      requestAnimationFrame(update);
+    });
+
+    // Отслеживание окончания движения мыши
+    canvas.addEventListener('mouseup', () => {
+      isMouseMoving = false;
+    });
+  </script>
+</body>
+</html>
