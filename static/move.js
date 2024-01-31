@@ -12,21 +12,20 @@ document.addEventListener('mousemove', (event) => {
     mouseY = event.clientY;
   });
 document.addEventListener("keydown", (e) => {
-    if ((e.code === 'KeyW'))
+    switch(e.code)
     {
-        movement.up = true;
-    }
-    if ((e.code === 'KeyS'))
-    {
-        movement.down = true;
-    }
-    if ((e.code === 'KeyA'))
-    {
-        movement.left = true;
-    }
-    if ((e.code === 'KeyD'))
-    {
-        movement.right = true;
+        case 'KeyW':
+            movement.up = true;
+            break;
+        case 'KeyS':
+            movement.down = true;
+            break;
+        case 'KeyA':
+            movement.left = true;
+            break;
+        case 'KeyD':
+            movement.right = true;
+            break;
     }
 });
 

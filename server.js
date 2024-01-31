@@ -10,9 +10,10 @@ import UserSchema from './models/user.js';
 import http, { get } from 'http';
 import { createServer } from "http";
 import { Server } from "socket.io";
-import bodyParser from 'body-parser'
+import bodyParser from 'body-parser';
 import checkAuth from './middlevares/checkAuth.js';
-import {getPlayer} from './server/player.js';
+import Player from './static/player.js'
+import {getPlayer} from './static/player.js';
 
 const urlencodedParser = express.urlencoded({extended: false});
 
